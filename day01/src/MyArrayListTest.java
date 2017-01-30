@@ -4,7 +4,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class MyArrayListTest {
-	MyArrayList cows = new MyArrayList();
+	MyArrayList<Cow> cows = new MyArrayList<>();
 
 	private static final Cow DELILAH = new Cow("Delilah", 10, "blue");
 	private static final Cow GEORGY = new Cow("Georgy", 8, "green");
@@ -15,7 +15,7 @@ public class MyArrayListTest {
 
 	@Before
 	public void setUp() throws Exception{
-		cows = new MyArrayList(4);
+		cows = new MyArrayList<Cow>(4);
 		cows.add(DELILAH);
 		cows.add(GEORGY);
 		cows.add(LILY);
@@ -51,7 +51,7 @@ public class MyArrayListTest {
 
 	@Test
 	public void testResize(){
-		MyArrayList resizeCows = new MyArrayList();
+		MyArrayList<Cow> resizeCows = new MyArrayList<>();
 		for (int i = 0; i < 1000; i++) {
 			String name = "Cow" + i;
 			int age = i;
