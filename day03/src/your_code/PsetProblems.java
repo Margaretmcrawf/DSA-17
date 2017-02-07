@@ -19,13 +19,14 @@ public class PsetProblems {
                     }
                     current = 0;
                 } else  {
-                    current++;
+                    current+=2;
                 }
             } else {
-                current++;
                 stack.push(charArray[i]);
             }
-
+        }
+        if (current > longest) {
+            longest = current;
         }
         return longest;
     }
