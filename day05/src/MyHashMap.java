@@ -43,7 +43,10 @@ public class MyHashMap<K, V> implements Map<K, V> {
 	 * Initialize maps
 	 */
 	protected void makeMaps(int size) {
-		// TODO: Implement this method
+		for (int i = 0; i < size; i++) {
+			maps.add(new MyLinearMap<K, V>());
+		}
+		this.size = size;
 	}
 
 	protected MyLinearMap<K, V> chooseMap(Object key) {

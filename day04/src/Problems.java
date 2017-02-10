@@ -3,8 +3,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static java.lang.Integer.max;
-
 public class Problems {
 
     public static Map<Integer, Integer> getCountMap(int[] arr) {
