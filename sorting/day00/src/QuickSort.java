@@ -1,18 +1,47 @@
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Random;
+
 public class QuickSort extends SortAlgorithm {
 
     private static final int INSERTION_THRESHOLD = 10;
 
     /**
-     * Best-case runtime:
-     * Worst-case runtime:
-     * Average-case runtime:
+     * Best-case runtime: nlogn
+     * Worst-case runtime: n^2
+     * Average-case runtime: nlogn
      *
-     * Space-complexity:
+     * Space-complexity: logn
      */
+
+    // Shuffle method courtesy of http://www.vogella.com/tutorials/JavaAlgorithmsShuffle/article.html
+
+    public void shuffleArray(int[] a) {
+        int n = a.length;
+        Random random = new Random();
+        random.nextInt();
+        for (int i = 0; i < n; i++) {
+            int change = i + random.nextInt(n - i);
+            swap(a, i, change);
+        }
+    }
+
+    void swap(int[] a, int i, int change) {
+        int helper = a[i];
+        a[i] = a[change];
+        a[change] = helper;
+    }
+
     @Override
     public int[] sort(int[] array) {
-        // TODO: Sort the array. Make sure you avoid the O(N^2) runtime worst-case
-        return new int[0];
+        shuffleArray(array); //shuffling the array will avoid the case where the array is already sorted.
+        if (array.length < INSERTION_THRESHOLD) {
+            InsertionSort insertionSort = new InsertionSort();
+            return insertionSort.sort(array);
+        } else {
+            quickSort(array, 0, array.length-1);
+            return array;
+        }
     }
 
     /**
@@ -24,9 +53,13 @@ public class QuickSort extends SortAlgorithm {
      * @param high The ending index of the subarray being considered (inclusive)
      */
     public void quickSort(int[] a, int low, int high) {
-        // TODO
-    }
 
+        if (low < high) {
+            int p = partition(a, low, high);
+            quickSort(a, low, p - 1);
+            quickSort(a, p+1, high);
+        }
+    }
 
     /**
      * Given an array, choose the array[low] element as the "pivot" element.
@@ -37,8 +70,32 @@ public class QuickSort extends SortAlgorithm {
      * @param high The ending index of the subarray being considered (inclusive)
      */
     public int partition(int[] array, int low, int high) {
-        // TODO
-        return 0;
-    }
+        //using the Hoare partition scheme.
 
+        int pivot = array[low];
+        int i = low + 1;
+        int j = high;
+        while (i <= j) {
+            while ((array[i] < pivot) && (i < array.length -1)) {
+                i++;
+            }
+
+            while ((array[j] > pivot) && (j > 0)) {
+                j--;
+            }
+
+            if (i <= j) {
+                int temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+
+                i++;
+                j--;
+            }
+        }
+
+        array[low] = array[i-1];
+        array[i-1] = pivot;
+        return i-1;
+    }
 }

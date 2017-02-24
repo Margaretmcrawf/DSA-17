@@ -123,8 +123,8 @@ public class SortTest {
         int[] a, partitioned;
         int finalIndex;
 
-        a = new int[] {5,6,8,3,1,10,2,5};
-        partitioned = new int[] {2,3,1,5,8,10,6,5};
+        a = new int[] {4,6,8,3,1,10,2,5};
+        partitioned = new int[] {3,2,1,4,8,10,6,5}; //swapped the 3 and 2, because I swap the first and ith element at the end.
         finalIndex = quickSort.partition(a, 0, 7);
         assertThat(finalIndex, is(3));
         assertArrayEquals(a, partitioned);

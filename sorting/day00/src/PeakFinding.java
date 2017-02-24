@@ -1,3 +1,4 @@
+import java.util.Arrays;
 
 public class PeakFinding {
 
@@ -50,11 +51,34 @@ public class PeakFinding {
         return maxIndex;
     }
 
+    public static int findPeak(int[] nums, int low, int high) {
+        //got the idea from Erica to have a helper function that can recurse with different bounds.
+        if ((high - low) == 1) {
+            return low;
+        } if ((high - low) == 2) {
+            return (nums[low] > nums[low+1]) ? low : low + 1;
+        }
 
+        int index = low + (high-low)/2;
+        if ((nums[index] >= nums[index-1]) && (nums[index] >= nums[index + 1])) {
+            return index;
+        } else {
+            if (nums[index + 1] > nums[index - 1]) {
+                return findPeak(nums, (index + 1), high);
+            } else {
+                return findPeak(nums, 0, index - 1);
+            }
+        }
 
-    public static int findOneDPeak(int[] nums){
-    	// TODO
-        return -1;
+    }
+
+    public static int findOneDPeak(int[] nums) {
+        int peak = findPeak(nums, 0, nums.length);
+        if (peak != -1) {
+            return peak;
+        } else {
+            return 0;
+        }
     }
 
     public static int[] findTwoDPeak(int[][] nums){

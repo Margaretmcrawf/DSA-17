@@ -43,31 +43,66 @@ public class MyHashMap<K, V> implements Map<K, V> {
 	 * Initialize maps
 	 */
 	protected void makeMaps(int size) {
+		maps = new ArrayList<>();
 		for (int i = 0; i < size; i++) {
 			maps.add(new MyLinearMap<K, V>());
 		}
-		this.size = size;
 	}
 
 	protected MyLinearMap<K, V> chooseMap(Object key) {
-		// TODO: Implement this method
-		return null;
+		if (key != null) {
+			int hashIndex = key.hashCode() % maps.size();
+			return maps.get(hashIndex);
+		} else {
+			int hashIndex = 0;
+			return maps.get(hashIndex);
+		}
 	}
 
 	@Override
 	public boolean containsKey(Object key) {
-		// TODO
+		for (int i = 0; i < maps.size(); i++) {
+			MyLinearMap linMap = maps.get(i);
+			if (linMap.containsKey(key)) {
+				return true;
+			}
+		}
 		return false;
 	}
 
 	@Override
 	public boolean containsValue(Object value) {
-		// TODO
+		for (int i = 0; i < maps.size(); i++) {
+			MyLinearMap linMap = maps.get(i);
+			if (linMap.containsValue(value)) {
+				return true;
+			}
+		}
 		return false;
 	}
 
 	protected void rehash(double growthFactor) {
-		// TODO: Implement this method
+		double temp = maps.size() * growthFactor;
+		int newCapacity = (int) temp;
+
+		List<MyLinearMap<K,V>> newMaps = new ArrayList<>();
+		for (int j = 0; j < newCapacity; j++) {
+			newMaps.add(new MyLinearMap<K, V>());
+		}
+
+		Set keys = keySet();
+		for (Object key : keys) {
+			Object value = get(key);
+			int i;
+			try {
+				i = key.hashCode() % newCapacity;
+			} catch (NullPointerException e) {
+				i = 0;
+			}
+			MyLinearMap newMap = newMaps.get(i);
+			newMap.put(key, value);
+		}
+		maps = newMaps;
 	}
 
 	@Override
@@ -78,14 +113,28 @@ public class MyHashMap<K, V> implements Map<K, V> {
 
 	@Override
 	public V put(K key, V value) {
-		// TODO
-		return null;
+		MyLinearMap linMap = chooseMap(key);
+		if (!linMap.containsKey(key)) {
+			size++;
+		}
+		V returnV = (V) linMap.put(key, value);
+		if (size/maps.size() >= ALPHA) {
+			rehash(GROWTH_FACTOR);
+		} else if ((size < BETA * maps.size()) && (maps.size()*SHRINK_FACTOR >= MIN_MAPS)) {
+			rehash(SHRINK_FACTOR);
+		}
+		return returnV;
 	}
 
 	@Override
 	public V remove(Object key) {
-		// TODO
-		return null;
+		MyLinearMap linMap = chooseMap(key);
+		size--;
+		V returnV = (V) linMap.remove(key);
+		if ((size < BETA * maps.size()) && maps.size()*SHRINK_FACTOR >= MIN_MAPS) {
+			rehash(SHRINK_FACTOR);
+		}
+		return returnV;
 	}
 
 	@Override

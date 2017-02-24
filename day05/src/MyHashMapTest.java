@@ -119,6 +119,7 @@ public class MyHashMapTest {
         for (int i = 6000; i < 9960; i++)
             map.remove(Integer.toString(i));
         assertThat(temp.maps.size(), is(128));
+        assertThat(temp.get("9971"), is(9971));
         for (int i = 9960; i < 9990; i++)
             map.remove(Integer.toString(i));
         assertThat(temp.maps.size(), is(32));

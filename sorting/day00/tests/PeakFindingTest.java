@@ -56,7 +56,7 @@ public class PeakFindingTest {
         for(int i = 0; i < nums.length; i++){
             nums[i] = gen.nextInt();
         }
-        isValidOneDSolution(nums,PeakFinding.findOneDPeak(nums));
+        isValidOneDSolution(nums, PeakFinding.findOneDPeak(nums));
     }
 
     @Test
