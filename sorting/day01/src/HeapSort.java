@@ -1,5 +1,5 @@
 public class HeapSort extends SortAlgorithm {
-    private int size;
+    private int size; //the amount of the array that is heap.
     private int[] heap;
 
     private int parent(int i) {
@@ -16,28 +16,46 @@ public class HeapSort extends SortAlgorithm {
 
     // Recursively corrects the position of element indexed i: check children, and swap with larger child if necessary.
     private void heapify(int i) {
-        // TODO
+        int rightChild = rightChild(i);
+        int leftChild = leftChild(i);
+        if (rightChild < size) {
+            int max = (heap[leftChild] > heap[rightChild]) ? leftChild : rightChild;
+            if (heap[i] < heap[max]) {
+                swap(heap, i, max);
+                heapify(max);
+            }
+        } else if (leftChild < size) { //case where only one child
+            if (heap[i] < heap[leftChild]) {
+                swap(heap, i, leftChild);
+                heapify(leftChild);
+            }
+        }
     }
 
     // Given the array, build a heap by correcting every non-leaf's position.
-    private void buildHeapFrom(int[] array) {
+    public void buildHeapFrom(int[] array) {
         this.heap = array;
         this.size = array.length;
-        // TODO
+        for (int j = size/2 -1; j >= 0; j--) {
+            heapify(j);
+        }
     }
 
     /**
-     * Best-case runtime:
-     * Worst-case runtime:
-     * Average-case runtime:
+     * Best-case runtime: nlogn
+     * Worst-case runtime: nlogn
+     * Average-case runtime: nlogn
      *
-     * Space-complexity:
+     * Space-complexity: logn?
      */
     @Override
     public int[] sort(int[] array) {
         buildHeapFrom(array);
         for (int i=size-1; i>0; i--) {
-            // TODO
+            swap(heap, i, 0);
+            size--;
+            heapify(0);
+
         }
         return heap;
     }

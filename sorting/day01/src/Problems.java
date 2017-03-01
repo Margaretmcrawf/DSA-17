@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class Problems {
 
@@ -42,7 +39,42 @@ public class Problems {
      */
     public static double[] runningMedian(int[] inputStream) {
         double[] runningMedian = new double[inputStream.length];
-        // TODO
+        //got some help from http://www.dsalgo.com/2013/02/RunningMedian.php.html
+        PriorityQueue<Integer> lowerQueue = new PriorityQueue<>(
+                20,new Comparator<Integer>() {
+
+            @Override
+            public int compare(Integer o1, Integer o2) {
+
+                return -o1.compareTo(o2);
+            }
+
+        });
+
+        PriorityQueue<Integer> upperQueue = new PriorityQueue<>();
+        upperQueue.add(Integer.MAX_VALUE);
+        lowerQueue.add(Integer.MIN_VALUE);
+
+        for (int i = 0; i < inputStream.length; i++) {
+            if(inputStream[i] >=upperQueue.peek())
+                upperQueue.add(inputStream[i]);
+            else
+                lowerQueue.add(inputStream[i]);
+
+            if(upperQueue.size()-lowerQueue.size()==2)
+                lowerQueue.add(upperQueue.poll());
+            else if(lowerQueue.size()-upperQueue.size()==2)
+                upperQueue.add(lowerQueue.poll());
+
+            if (upperQueue.size()==lowerQueue.size()) {
+                runningMedian[i] = (upperQueue.peek()+lowerQueue.peek())/2.0;
+            } else if (upperQueue.size()>lowerQueue.size()) {
+                runningMedian[i] = upperQueue.peek();
+            } else {
+                runningMedian[i] = lowerQueue.peek();
+            }
+        }
+
         return runningMedian;
     }
 

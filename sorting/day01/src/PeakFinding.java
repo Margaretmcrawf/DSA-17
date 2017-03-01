@@ -61,8 +61,55 @@ public class PeakFinding {
     }
 
     public static int[] findTwoDPeak(int[][] nums) {
-        // TODO
-        return null;
+
+        return findTwoDPeakRange(nums, 0, nums.length, 0, nums.length);
+    }
+
+    //lo and hi are max and min y values.
+    public static int[] findTwoDPeakRange(int[][] nums, int loy, int hiy, int lox, int hix) {
+        int xMiddle = (hix + lox)/2;
+        int yMiddle = (hiy + loy)/2;
+
+        int maxYindex = maxYIndex(xMiddle, loy, hiy, nums);
+        int xside = peakX(xMiddle, maxYindex, nums);
+        // check if there is a peak at the middle x position and the max y
+        if (xside == 0) {
+            int[] newarr = {maxYindex, xMiddle};
+            return newarr;
+        }
+
+        //if not, go left or right
+        else if (xside == 1) { //right is higher
+            int maxXIndex = maxXIndex(yMiddle, xMiddle + 1, hix, nums);
+            //if this is a peak in the y direction too, it must be a 2D peak, return.
+            int yside = peakY(maxXIndex, yMiddle, nums);
+            if (yside == 0) {
+                int[] newarr = {yMiddle, maxXIndex};
+                return newarr;
+            } else {
+                if (yside == 1) {
+                    return findTwoDPeakRange(nums, yMiddle + 1, hiy, xMiddle + 1, hix);
+                } else {
+                    return findTwoDPeakRange(nums, loy, yMiddle, xMiddle + 1, hix);
+                }
+            }
+        }
+
+        else { //left is higher
+            int maxXIndex = maxXIndex(yMiddle, lox, xMiddle, nums);
+            //if this is a peak in the y direction too, it must be a 2D peak, return.
+            int yside = peakY(maxXIndex, yMiddle, nums);
+            if (yside == 0) {
+                int[] newarr = {yMiddle, maxXIndex};
+                return newarr;
+            } else {
+                if (yside == 1) {
+                    return findTwoDPeakRange(nums, yMiddle + 1, hiy, lox, xMiddle);
+                } else {
+                    return findTwoDPeakRange(nums, loy, yMiddle, lox, xMiddle);
+                }
+            }
+        }
     }
 
 }
