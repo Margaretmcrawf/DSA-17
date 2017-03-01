@@ -1,6 +1,7 @@
 public class HeapSort extends SortAlgorithm {
-    private int size; //the amount of the array that is heap.
-    private int[] heap;
+    public int size; //the amount of the array that is heap.
+    public int[] heap;
+
 
     private int parent(int i) {
         return (i-1) / 2;
@@ -15,7 +16,7 @@ public class HeapSort extends SortAlgorithm {
     }
 
     // Recursively corrects the position of element indexed i: check children, and swap with larger child if necessary.
-    private void heapify(int i) {
+    public void heapify(int i) {
         int rightChild = rightChild(i);
         int leftChild = leftChild(i);
         if (rightChild < size) {
