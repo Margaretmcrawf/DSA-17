@@ -5,6 +5,8 @@ public class CountingSort {
     /**
      * Use counting sort to sort positive integer array A.
      * Runtime: k + n
+     * k: maximum element in array A
+
      */
     static void countingSort(int[] A) {
         int max = 0;
