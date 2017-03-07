@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class BinarySearchTree<T extends Comparable<T>> {
@@ -28,8 +29,25 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
     public List<T> inOrderTraversal() {
-        // TODO
-        return null;
+        ArrayList<T> values =  new ArrayList<T>();
+        if (size == 0) {
+            return values;
+        } else if (size == 1) {
+            values.add(root.key);
+            return values;
+        } else {
+            TreeNode<T> tn = root;
+            //get the minimum treenode, so you can move there.
+            while (tn.leftChild != null) {
+                tn = tn.leftChild;
+            }
+            values.add(tn.key);
+            while (findSuccessor(tn) != null) {
+                tn = findSuccessor(tn);
+                values.add(tn.key);
+            }
+            return values;
+        }
     }
 
     /**
@@ -61,15 +79,16 @@ public class BinarySearchTree<T extends Comparable<T>> {
         if (n.isLeaf())
             // Case 1: no children
             replacement = null;
-        else if (n.hasRightChild() != n.hasLeftChild())
+        else if (n.hasRightChild() != n.hasLeftChild()) {
             // Case 2: one child
             replacement = (n.hasRightChild()) ? n.rightChild : n.leftChild; // replacement is the non-null child
+        }
         else {
             // Case 3: two children
-            // TODO
-            replacement = null;
+            replacement = findSuccessor(n);
+            delete(replacement);
+            replacement.moveChildrenFrom(n);
         }
-
         // Put the replacement in its correct place, and set the parent.
         n.replaceWith(replacement);
         return replacement;
@@ -96,13 +115,48 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
     private TreeNode<T> findPredecessor(TreeNode<T> n) {
-        // TODO
-        return null;
+        // https://www.quora.com/How-can-you-find-successors-and-predecessors-in-a-binary-search-tree-in-order
+        //above was a really helpful reference for how to go about finding the predecessor and successor
+        if (n == null) {
+            return null;
+        }
+        if (n.leftChild != null) {
+            TreeNode<T> current = n.leftChild;
+
+            while (current.rightChild != null) { //while current key is less than n's key
+                current = current.rightChild;
+            }
+            return current;
+        } else {
+            TreeNode<T> y =  n.parent;
+            TreeNode<T> x = n;
+            while ((y != null) && (x == y.leftChild)) {
+                x = y;
+                y = y.parent;
+            }
+            return y;
+        }
     }
 
     private TreeNode<T> findSuccessor(TreeNode<T> n) {
-        // TODO
-        return null;
+        if (n == null) {
+            return null;
+        } else if (n.rightChild != null) {
+            TreeNode<T> current = n.rightChild;
+            while (current.leftChild != null) {
+                current = current.leftChild;
+            }
+            return current;
+        } else {
+            TreeNode<T> y = n.parent;
+            TreeNode<T> x = n;
+            while (y != null && x == y.rightChild)
+            {
+                x = y;
+                y = y.parent;
+            }
+            return y;
+        }
     }
 
     /**
