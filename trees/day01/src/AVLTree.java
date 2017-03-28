@@ -1,3 +1,5 @@
+import static java.lang.Math.max;
+
 public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 
     /**
@@ -6,8 +8,11 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
     @Override
     TreeNode<T> delete(TreeNode<T> n, T key) {
         n = super.delete(n,key);
-        if(n != null) {
-            // TODO: Update height and balance tree
+        if (n != null) {
+            int rHeight = (n.hasRightChild()) ? n.rightChild.height  : -1;
+            int lHeight = (n.hasLeftChild()) ? n.leftChild.height : -1;
+            n.height = max(rHeight, lHeight) + 1;
+            return balance(n);
         }
         return null;
     }
@@ -17,8 +22,11 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
     @Override
     TreeNode<T> insert(TreeNode<T>  n, T key) {
         n = super.insert(n,key);
-        if(n != null) {
-            // TODO: update height and balance tree
+        if (n != null) {
+            int rHeight = (n.hasRightChild()) ? n.rightChild.height  : -1;
+            int lHeight = (n.hasLeftChild()) ? n.leftChild.height : -1;
+            n.height = max(rHeight, lHeight) + 1;
+            return balance(n);
         }
         return null;
     }
@@ -30,7 +38,7 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
     TreeNode<T> deleteMin(TreeNode<T> n){
         n = super.deleteMin(n);
         if(n != null) {
-            n.height = 1 + Math.max(height(n.leftChild), height(n.rightChild));
+            n.height = 1 + max(height(n.leftChild), height(n.rightChild));
             return balance(n);
         }
         return null;
@@ -38,18 +46,36 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 
     // Return the height of the given node. Return -1 if null.
     private int height(TreeNode<T> n) {
-        // TODO
-        return 0;
+        if (n == null) {
+            return -1;
+        } else {
+            return max(height(n.rightChild), height(n.leftChild)) + 1;
+        }
     }
 
     public int height() {
-        return Math.max(height(root),0);
+        return max(height(root),0);
     }
 
     // Restores the AVL tree property of the subtree.
     TreeNode<T> balance(TreeNode<T> n) {
-        // TODO
-        return null;
+        if  (balanceFactor(n) < -1) {
+            //very left heavy
+            if (balanceFactor(n.leftChild) > 0) {
+                //left child is right heavy
+                n.leftChild = rotateLeft(n.leftChild);
+            }
+            n = rotateRight(n);
+        }
+        if (balanceFactor(n) > 1) {
+            //very right heavy
+            if (balanceFactor(n.rightChild) < 0) {
+                //right child is left heavy
+                n.rightChild = rotateRight(n.rightChild);
+            }
+            n = rotateLeft(n);
+        }
+        return n;
     }
 
     /**
@@ -60,23 +86,34 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
      * most one.
      */
     private int balanceFactor(TreeNode<T> n) {
-        // TODO
-        return 0;
+        int rightHeight = height(n.rightChild);
+        int leftHeight = height(n.leftChild);
+        return rightHeight - leftHeight;
     }
 
     /**
      * Perform a right rotation on node `n`. Return the head of the rotated tree.
      */
     private TreeNode<T> rotateRight(TreeNode<T> n) {
-        // TODO
-        return null;
+        TreeNode<T> m = n.leftChild;
+        TreeNode<T> beta = n.leftChild.rightChild;
+        n.leftChild.rightChild = n;
+        n.leftChild = beta;
+        n.height = height(n);
+        m.height = height(m);
+        return m;
     }
 
     /**
      * Perform a left rotation on node `n`. Return the head of the rotated tree.
      */
     private TreeNode<T> rotateLeft(TreeNode<T> n) {
-        // TODO
-        return null;
+        TreeNode<T> m = n.rightChild;
+        TreeNode<T> beta = n.rightChild.leftChild;
+        n.rightChild.leftChild = n;
+        n.rightChild = beta;
+        n.height = height(n);
+        m.height = height(m);
+        return m;
     }
 }
