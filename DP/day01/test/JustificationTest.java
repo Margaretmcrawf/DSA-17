@@ -106,5 +106,21 @@ public class JustificationTest {
         assertCorrectSoln(soln, TextJustification.justifyText(w, m), w, m);
     }
 
-    // TODO: add more test cases here
+    @Test
+    public void testJustifyText9() {
+        //everything fits on one line.
+        List<Integer> soln = Arrays.asList(0);
+        int m = 200;
+        String[] w = {"aaaaaaaaaaaaaaaaaaaaaaa"};
+        assertCorrectSoln(soln, TextJustification.justifyText(w, m), w, m);
+    }
+
+    @Test
+    public void testJustifyText10() {
+        //There is no way to make it not infinity.
+        List<Integer> soln = Arrays.asList(0);
+        int m = 2;
+        String[] w = {"aaaaaaaaaaaaaaaaaaaaaaa"};
+        assertCorrectSoln(soln, TextJustification.justifyText(w, m), w, m);
+    }
 }

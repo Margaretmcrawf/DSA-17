@@ -31,5 +31,13 @@ public class DistanceTest {
         assertThat(EditDistance.minEditDist("", "sidd"), is(4));
     }
 
-    // TODO: Add test cases
+    @Test
+    public void testMinEditDist6() {
+        assertThat(EditDistance.minEditDist("", ""), is(0));
+    }
+
+    @Test
+    public void testMinEditDist7() {
+        assertThat(EditDistance.minEditDist("hello", "hello"), is(0));
+    }
 }
